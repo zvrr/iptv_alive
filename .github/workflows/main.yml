@@ -32,4 +32,4 @@ jobs:
           git merge upstream/master --no-edit
 
       - name: Push changes back to your fork
-        run: git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+        run: git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git master
