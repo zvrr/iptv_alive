@@ -1,0 +1,35 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: "0 5 * * *"   # 每天 5:00 UTC（如果你想北京时间 5 点见下方说明）
+  workflow_dispatch:       # 手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/zwc456baby/iptv_alive.git
+          # ↑ 这里改成你 upstream 仓库的实际地址
+          git fetch upstream
+
+      - name: Merge upstream/main -> main
+        run: |
+          git checkout main
+          git merge upstream/main --no-edit
+
+      - name: Push changes back to your fork
+        run: git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
